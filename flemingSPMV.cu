@@ -35,3 +35,11 @@ __global__ void spmvCuda(unsigned int num_row, const float* Value, const int* co
 		y[row] = sum;
 	}
 }
+
+int main( int argc, char** argv) {
+	if(argc != 2) {
+		printf("Please specify exactly 1 input file");
+		return 1;
+	}
+
+}
