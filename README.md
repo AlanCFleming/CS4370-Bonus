@@ -8,8 +8,8 @@ This is a cuda program that covers sparce matrix-vector multiplication for class
 
 ## Compiling
 nvcc was used to compile these programs. This will create an executable program.
-* Command for compiling sum reduction: nvcc flemingSparceMatrixVectorMultiplication.cu -o SPVM
+* Command for compiling sum reduction: nvcc flemingSPMV.cu -o SPMV
 
 ## Running
 These programs can be run directly from the command line.
-* Command for parallel sum reduction: {path}/SPVM
+* Command for parallel sum reduction: {path}/SPMV
