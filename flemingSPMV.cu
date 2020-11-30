@@ -107,16 +107,45 @@ int main( int argc, char** argv) {
 	
 	//allocate needed memory on the gpu
 	int* dev_col, dev_row;
-	float* dev_value, dev_x;
+	float* dev_value, dev_x, dev_y;
 	cudaMalloc((void **)(&dev_col), sizeof(int) * num_col);
 	cudaMalloc((void **)(&dev_row), sizeof(int) * (num_row + 1));
 	cudaMalloc((void **)(&dev_value), sizeof(float) * num_non_zero);
 	cudaMalloc((void **)(&dev_x), sizeof(float) * num_col);
+	cudaMalloc((void **)(&dev_y), sizeof(float) * num_row);
 
 	cudaMemcpy(dev_col, col_idx, sizeof(int) * num_col, cudaMemcpyHostToDevice);
 	cudaMemcpy(dev_row, row_ptr, sizeof(int) * (num_row + 1), cudaMemcpyHostToDevice);
 	cudaMemcpy(dev_value, value, sizeof(float) * num_non_zero, cudaMemcpyHostToDevice);
 	cudaMemcpy(dev_x, x, sizeof(float) * num_col, cudaMemcpyHostToDevice);
+
+	//calculate dimensions for gpu
+	dim3 dimBlock(BLOCKSIZE);
+	dim3 dimGrid(ceil(double(num_row)/dimBlock.x));
+
+	//Set up cuda events for recording runtime
+	cudaEvent_t start,stop;
+	float GPUTime; 
+	cudaEventCreate(&start);
+	cudaEventCreate(&stop);
+	cudaEventRecord(start,0);
+											
+	//calculate histogram without shared memory
+	spmvCuda<<<dimGrid, dimBlock>>>(num_row, dev_value, dev_col, dev_row, dev_x, dev_y);
+													
+	//calculate runtime 
+	cudaEventRecord(stop,0);
+	cudaEventSynchronize(stop);
+	cudaEventElapsedTime(&GPUTime,start,stop);
+
+	//destroy cuda events
+	cudaEventDestroy(start);
+	cudaEventDestroy(stop);
+
+	//print results
+	printf("--%s--\nCPU Runtime: %f\nGpu Runtime: %f\nSpeedup: %f\n", argv[1], (double)cpuTime, (double)GPUTime, double(cpuTime / GPUTime));
+
+
 
 	
 	return 0;
