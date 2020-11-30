@@ -87,5 +87,24 @@ int main( int argc, char** argv) {
 
 	input.close();
 
+	//declare and allocate output variables
+	float *resultCPU = (float *)malloc(sizeof(float) * num_row);
+	float *resultGPU = (float *)malloc(sizeof(float) * num_row);
+
+	//Test CPU
+	//Get start time
+	clock_t t1 = clock();
+	//Calculate reduction
+		
+	spmvCPU(input, cpuResult, MATRIXSIZE);
+				
+	//Get stop time
+	clock_t t2 = clock();
+	//Calculate runtime
+	float cpuTime= (float(t2-t1)/CLOCKS_PER_SEC*1000);
+
+	
 	return 0;
+
+
 }
