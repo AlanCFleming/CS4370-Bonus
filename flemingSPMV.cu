@@ -4,11 +4,11 @@
 #include <cuda.h>
 #include <fstream.h>
 //Code written by Alan Fleming
+
 //CONSTANTS
-#define MATRIXSIZE 2048
 #define BLOCKSIZE 1024
 
-void spmvCPU(unsigned int num_row, const float* Value, const unsigned int* col_idx, const unsigned int* row_ptr, const float* x, float* y) {
+void spmvCPU(unsigned int num_row, const float* value, const unsigned int* col_idx, const unsigned int* row_ptr, const float* x, float* y) {
 	
 	//preform multiplication using CSR format
 	//loop over rows
@@ -22,7 +22,7 @@ void spmvCPU(unsigned int num_row, const float* Value, const unsigned int* col_i
 	}
 }
 
-__global__ void spmvCuda(unsigned int num_row, const float* Value, const int* col_idx, const int* row_ptr, const float* x, float* y){
+__global__ void spmvCuda(unsigned int num_row, const float* value, const int* col_idx, const int* row_ptr, const float* x, float* y){
 
 	//calculate row to work on
 	int row = blockDim.x * blockIdx.x + threadIdx.x;
@@ -96,12 +96,27 @@ int main( int argc, char** argv) {
 	clock_t t1 = clock();
 	//Calculate reduction
 		
-	spmvCPU(input, cpuResult, MATRIXSIZE);
+	spmvCPU(num_row, value, col_idx, row_ptr, x, resultCPU);
 				
 	//Get stop time
 	clock_t t2 = clock();
 	//Calculate runtime
 	float cpuTime= (float(t2-t1)/CLOCKS_PER_SEC*1000);
+
+	
+	
+	//allocate needed memory on the gpu
+	int* dev_col, dev_row;
+	float* dev_value, dev_x;
+	cudaMalloc((void **)(&dev_col), sizeof(int) * num_col);
+	cudaMalloc((void **)(&dev_row), sizeof(int) * (num_row + 1));
+	cudaMalloc((void **)(&dev_value), sizeof(float) * num_non_zero);
+	cudaMalloc((void **)(&dev_x), sizeof(float) * num_col);
+
+	cudaMemcpy(dev_col, col_idx, sizeof(int) * num_col, cudaMemcpyHostToDevice);
+	cudaMemcpy(dev_row, row_ptr, sizeof(int) * (num_row + 1), cudaMemcpyHostToDevice);
+	cudaMemcpy(dev_value, value, sizeof(float) * num_non_zero, cudaMemcpyHostToDevice);
+	cudaMemcpy(dev_x, x, sizeof(float) * num_col, cudaMemcpyHostToDevice);
 
 	
 	return 0;

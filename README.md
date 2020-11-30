@@ -1,8 +1,7 @@
 # CS4370-Project4
 This is a cuda program that covers sparce matrix-vector multiplication for class.
 
-## Editing BLOCKSIZE and MATRIXSIZE
-* A define statement for MATRIXSIZE can be found on line 8 of the .cu file
+## Editing BLOCKSIZE
 * A define statement for BLOCKSIZE can be found on line 9 of the .cu file
 
 
