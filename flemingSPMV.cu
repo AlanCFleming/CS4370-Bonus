@@ -145,9 +145,37 @@ int main( int argc, char** argv) {
 	//print results
 	printf("--%s--\nCPU Runtime: %f\nGpu Runtime: %f\nSpeedup: %f\n", argv[1], (double)cpuTime, (double)GPUTime, double(cpuTime / GPUTime));
 
+	//copy resulting calculation from device
+	cudaMemcpy(dev_y, resultGPU, sizeof(float) * num_row, cudaMemcpyDeviceToHost);
 
+	//verify results
+	bool valid = true;
+	for(int i = 0; i < 256; i++) {	
+		if(resultCPU[i] != resultGPU[i]) {
+			valid = false;
+			break;
+		}
+	}
 
-	
+	if(valid) {
+		printf("TEST PASSED\n");
+	} else {
+		printf("TEST FAILED\n");
+	}
+
+	//free up memory before returning
+	free(row_ptr);
+	free(col_idx);
+	free(value);
+	free(x);
+	free(resultCPU);
+	free(resultGPU);
+	cudaFree(dev_col);
+	cudaFree(dev_row);
+	cudaFree(dev_value);
+	cudaFree(dev_x);
+	cudaFree(dev_y);
+
 	return 0;
 
 
