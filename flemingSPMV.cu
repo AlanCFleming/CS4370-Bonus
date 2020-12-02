@@ -2,8 +2,8 @@
 #include <math.h>
 #include <time.h>
 #include <cuda.h>
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 //Code written by Alan Fleming
 //CONSTANTS
 #define BLOCKSIZE 1024
