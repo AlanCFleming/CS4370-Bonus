@@ -57,14 +57,14 @@ int main( int argc, char** argv) {
 	int* col_idx, row_ptr;
 
 	//first line of input is num_row+1
-	getline(input, num_row);
+	input >> num_row;
 	num_row--;
 
 	//Second line of input is the number of non-zero elements (the number of elements in value)
-       	getline(input, num_non_zero);
+       	input >> num_non_zero;
 
 	//Third line is number of column in matrix / rows in vector
-	getline(input, num_col);
+	input >> num_col;
 
 	
 	//allocate the variables for data
@@ -75,16 +75,16 @@ int main( int argc, char** argv) {
 
 	//read in data
 	for(int i = 0; i < num_row + 1, i++){
-		getline(input, row_ptr[i]);
+		input >> row_ptr[i];
 	}
 	for(int i = 0; i < num_col; i++){
-		getline(input, col_idx[i]);
+		input >> col_idx[i];
 	}
 	for(int i = 0; i < num_non_zero; i++){
-		getline(input, value[i]);
+		input >> value[i];
 	}
 	for(int i = 0; i < num_col; i++){
-		getline(input, x[i]);
+		input >> x[i];
 	}
 
 	input.close();
