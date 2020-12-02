@@ -51,10 +51,8 @@ int main( int argc, char** argv) {
 		return 2;
 	}
 	
-	//declare up variables to read into
+	//variables for counts
 	unsigned int num_row, num_non_zero, num_col;
-	float* value, x;
-	int* col_idx, row_ptr;
 
 	//first line of input is num_row+1
 	input >> num_row;
@@ -67,11 +65,11 @@ int main( int argc, char** argv) {
 	input >> num_col;
 
 	
-	//allocate the variables for data
-	*row_ptr = (int*)malloc(sizeof(int) * (num_row+1));
-	*col_idx = (int *)malloc(sizeof(int) * num_col);
-	*value = (float *)malloc(sizeof(float) * num_non_zero);
-	*x = (float *)malloc(sizeof(float) * num_col);
+	//variables for data
+	int *row_ptr = (int*)malloc(sizeof(int) * (num_row+1));
+	int *col_idx = (int *)malloc(sizeof(int) * num_col);
+	float *value = (float *)malloc(sizeof(float) * num_non_zero);
+	float *x = (float *)malloc(sizeof(float) * num_col);
 
 	//read in data
 	for(int i = 0; i < num_row + 1; i++){
