@@ -2,9 +2,9 @@
 #include <math.h>
 #include <time.h>
 #include <cuda.h>
+#include <iostream.h>
 #include <fstream.h>
 //Code written by Alan Fleming
-
 //CONSTANTS
 #define BLOCKSIZE 1024
 
@@ -12,11 +12,11 @@ void spmvCPU(unsigned int num_row, const float* value, const unsigned int* col_i
 	
 	//preform multiplication using CSR format
 	//loop over rows
-	for(int i=0; i < num_row, i++) {
+	for(int i=0; i < num_row; i++) {
 		float sum = 0;
 		//loop over non-zero elements
-		for(int i = row_ptr[i]; i < row_ptr[i + 1]; j++){
-			sum += value[i] * x[col_idx[i]];
+		for(int j = row_ptr[i]; j < row_ptr[i + 1]; j++){
+			sum += value[j] * x[col_idx[j]];
 		}
 		y[i] = sum;
 	}
@@ -27,9 +27,9 @@ __global__ void spmvCuda(unsigned int num_row, const float* value, const int* co
 	//calculate row to work on
 	int row = blockDim.x * blockIdx.x + threadIdx.x;
 	//If the row is within bounds preform multiplication for that row
-	if(row < num_rows) {
+	if(row < num_row) {
 		float sum = 0;
-		for(int i = row_ptr[row]; i < row_ptr[row + 1]; j++){
+		for(int i = row_ptr[row]; i < row_ptr[row + 1]; i++){
 			sum += value[i] * x[col_idx[i]];
 		}
 		y[row] = sum;
