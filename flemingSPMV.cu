@@ -22,7 +22,7 @@ void spmvCPU(int num_row, const float* value, const int* col_idx, const int* row
 	}
 }
 
-__global__ void spmvCuda(int num_row, const float* value, const int* col_idx, const uint* row_ptr, const float* x, float* y){
+__global__ void spmvCuda(int num_row, const float* value, const int* col_idx, const int* row_ptr, const float* x, float* y){
 
 	//calculate row to work on
 	int row = blockDim.x * blockIdx.x + threadIdx.x;
