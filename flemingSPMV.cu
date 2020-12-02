@@ -8,7 +8,7 @@
 //CONSTANTS
 #define BLOCKSIZE 1024
 
-void spmvCPU(unsigned int num_row, const float* value, const unsigned int* col_idx, const unsigned int* row_ptr, const float* x, float* y) {
+void spmvCPU(int num_row, const float* value, const int* col_idx, const int* row_ptr, const float* x, float* y) {
 	
 	//preform multiplication using CSR format
 	//loop over rows
@@ -22,7 +22,7 @@ void spmvCPU(unsigned int num_row, const float* value, const unsigned int* col_i
 	}
 }
 
-__global__ void spmvCuda(unsigned int num_row, const float* value, const unsigned int* col_idx, const unsigned int* row_ptr, const float* x, float* y){
+__global__ void spmvCuda(int num_row, const float* value, const int* col_idx, const uint* row_ptr, const float* x, float* y){
 
 	//calculate row to work on
 	int row = blockDim.x * blockIdx.x + threadIdx.x;
@@ -52,7 +52,7 @@ int main( int argc, char** argv) {
 	}
 	
 	//variables for counts
-	unsigned int num_row, num_non_zero, num_col;
+	int num_row, num_non_zero, num_col;
 
 	//first line of input is num_row+1
 	input >> num_row;
@@ -66,8 +66,8 @@ int main( int argc, char** argv) {
 
 	
 	//variables for data
-	unsigned int *row_ptr = (int*)malloc(sizeof(int) * (num_row+1));
-	unsigned int *col_idx = (int *)malloc(sizeof(int) * num_col);
+	int *row_ptr = (int*)malloc(sizeof(int) * (num_row+1));
+	int *col_idx = (int *)malloc(sizeof(int) * num_col);
 	float *value = (float *)malloc(sizeof(float) * num_non_zero);
 	float *x = (float *)malloc(sizeof(float) * num_col);
 
