@@ -68,13 +68,13 @@ int main( int argc, char** argv) {
 
 	
 	//allocate the variables for data
-	row_ptr = (int*)malloc(sizeof(int) * (num_row+1));
-	col_idx = (int *)malloc(sizeof(int) * num_col);
-	value = (float *)malloc(sizeof(float) * num_non_zero);
-	x = (float *)malloc(sizeof(float) * num_col);
+	*row_ptr = (int*)malloc(sizeof(int) * (num_row+1));
+	*col_idx = (int *)malloc(sizeof(int) * num_col);
+	*value = (float *)malloc(sizeof(float) * num_non_zero);
+	*x = (float *)malloc(sizeof(float) * num_col);
 
 	//read in data
-	for(int i = 0; i < num_row + 1, i++){
+	for(int i = 0; i < num_row + 1; i++){
 		input >> row_ptr[i];
 	}
 	for(int i = 0; i < num_col; i++){
