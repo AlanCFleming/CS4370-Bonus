@@ -8,7 +8,7 @@
 //CONSTANTS
 #define BLOCKSIZE 1024
 
-void spmvCPU(int num_row, const float* value, const int* col_idx, const int* row_ptr, const float* x, float* y) {
+void spmvCPU(int num_row, float* value, int* col_idx, int* row_ptr, float* x, float* y) {
 	
 	//preform multiplication using CSR format
 	//loop over rows
@@ -22,7 +22,7 @@ void spmvCPU(int num_row, const float* value, const int* col_idx, const int* row
 	}
 }
 
-__global__ void spmvCuda(int num_row, const float* value, const int* col_idx, const int* row_ptr, const float* x, float* y){
+__global__ void spmvCuda(int num_row, float* value, int* col_idx, int* row_ptr, float* x, float* y){
 
 	//calculate row to work on
 	int row = blockDim.x * blockIdx.x + threadIdx.x;
@@ -106,8 +106,8 @@ int main( int argc, char** argv) {
 	
 	
 	//allocate needed memory on the gpu
-	int* dev_col, dev_row;
-	float* dev_value, dev_x, dev_y;
+	int* dev_col, *dev_row;
+	float* dev_value, *dev_x, *dev_y;
 	cudaMalloc((void **)(&dev_col), sizeof(int) * num_col);
 	cudaMalloc((void **)(&dev_row), sizeof(int) * (num_row + 1));
 	cudaMalloc((void **)(&dev_value), sizeof(float) * num_non_zero);
