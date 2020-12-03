@@ -11,4 +11,4 @@ nvcc was used to compile these programs. This will create an executable program.
 
 ## Running
 These programs can be run directly from the command line.
-* Command for parallel sum reduction: {path}/SPMV
+* Command for parallel sum reduction: {path to executable}/SPMV {path to data file}
